@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">hotspot</string>
+    <string name="btn1">on/off Hotspot</string>
+    <string name="btn2">Hotspot info</string>
+</resources>
