@@ -46,7 +46,7 @@ export default class App extends Component {
         </View>
         <View style = {{marginBottom: 10}}>
           <Text style = {styles.subtitle}>Fetch hotspot settings</Text>
-          <Button title='fetch' onPress = {() => this.fitch()}  />
+          <Button title='fetch' onPress = {() => this.fetch()}  />
         </View>
         <View>
           <Text style = {styles.subtitle}>Show all peers</Text>
@@ -94,9 +94,9 @@ export default class App extends Component {
       ToastAndroid.show(err.toString(), ToastAndroid.SHORT);
     })
   }
-  fitch() {
+  fetch() {
     Hotspot.getConfig((config) => {
-      ToastAndroid.show(config.status.toString(), ToastAndroid.SHORT);
+      ToastAndroid.show(config.ssid, ToastAndroid.SHORT);
     }, (err) => {
       ToastAndroid.show(err.toString(), ToastAndroid.SHORT);
     })
