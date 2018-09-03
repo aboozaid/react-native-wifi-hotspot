@@ -14,7 +14,7 @@ import {
   ToastAndroid,
   ListView
 } from 'react-native';
-import Hotspot from 'react-native-hotspot';
+import Hotspot from 'react-native-wifi-hotspot';
 
 export default class App extends Component {
   constructor(props) {
