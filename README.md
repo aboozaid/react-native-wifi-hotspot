@@ -19,7 +19,7 @@ The kit is designed to be helpful and to provide an easy API that can suit your 
 ## Setup
 Fetch it using npm or yarn
 ```
-npm i --save react-naive-wifi-hotspot
+npm i --save react-native-wifi-hotspot
 OR
 yarn add react-native-wifi-hotspot
 ```
