@@ -25,7 +25,7 @@ yarn add react-native-wifi-hotspot
 ```
 Then run this command to link it
 ```
-react-native link react-naive-wifi-hotspot
+react-native link react-native-wifi-hotspot
 ```
 Almost done just put this lines into `Settings.gradle`
 ```
