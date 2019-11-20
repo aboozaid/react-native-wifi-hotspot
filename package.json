@@ -26,11 +26,5 @@
   "peerDependencies": {
     "react-native": ">=0.40"
   },
-  "dependencies": {},
-  "rnpm": {
-    "android": {
-      "packageInstance": "new HotspotModule()"
-    }
-  }
-
+  "dependencies": {}
 }
