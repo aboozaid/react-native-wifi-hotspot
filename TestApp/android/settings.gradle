@@ -1,0 +1,7 @@
+rootProject.name = 'TestApp'
+ include ':react-native-wifi-hotspot'
+ project(':react-native-wifi-hotspot').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-wifi-hotspot/android')
+include ':hotspotmanager'
+project(':hotspotmanager').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-wifi-hotspot/android/hotspotmanager')
+apply from: file("../node_modules/@react-native-community/cli-platform-android/native_modules.gradle"); applyNativeModulesSettingsGradle(settings)
+include ':app'
