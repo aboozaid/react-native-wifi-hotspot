@@ -1,7 +1,6 @@
 package reactnative.hotspot;
 
 import android.net.wifi.WifiConfiguration;
-import android.support.annotation.Nullable;
 import android.telecom.Call;
 
 import com.facebook.react.bridge.Arguments;
