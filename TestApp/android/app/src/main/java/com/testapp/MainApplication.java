@@ -2,16 +2,16 @@ package com.testapp;
 
 import android.app.Application;
 import android.content.Context;
-import com.facebook.react.PackageList;
 import com.facebook.react.ReactApplication;
-import reactnative.hotspot.HotspotPackage;
-import reactnative.hotspot.HotspotPackage;
 import com.facebook.react.ReactInstanceManager;
 import com.facebook.react.ReactNativeHost;
 import com.facebook.react.ReactPackage;
+import com.facebook.react.shell.MainReactPackage;
 import com.facebook.soloader.SoLoader;
 import java.lang.reflect.InvocationTargetException;
+import java.util.Arrays;
 import java.util.List;
+import reactnative.hotspot.HotspotPackage;
 
 public class MainApplication extends Application implements ReactApplication {
 
@@ -21,14 +21,13 @@ public class MainApplication extends Application implements ReactApplication {
       return BuildConfig.DEBUG;
     }
 
+    //Replaced this method with the one in the original repo
     @Override
     protected List<ReactPackage> getPackages() {
-      @SuppressWarnings("UnnecessaryLocalVariable")
-      List<ReactPackage> packages = new PackageList(this).getPackages();
-      // Packages that cannot be autolinked yet can be added manually here, for
-      // example:
-      packages.add(new HotspotPackage());
-      return packages;
+      return Arrays.<ReactPackage>asList(
+              new MainReactPackage(),
+              new HotspotPackage()
+      );
     }
 
     @Override
@@ -46,7 +45,8 @@ public class MainApplication extends Application implements ReactApplication {
   public void onCreate() {
     super.onCreate();
     SoLoader.init(this, /* native exopackage */ false);
-    initializeFlipper(this, getReactNativeHost().getReactInstanceManager());
+    //This causes the app to crash
+    //initializeFlipper(this, getReactNativeHost().getReactInstanceManager());
   }
 
   /**
