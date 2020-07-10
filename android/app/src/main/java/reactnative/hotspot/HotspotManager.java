@@ -27,96 +27,26 @@ public class HotspotManager {
         wifi.showWritePermissionSettings(false);
     }
 
-    public boolean isEnabled() {
-        if(!wifi.isWifiApEnabled()) {
-            wifi.setWifiApEnabled(null, true);
-            return true;
-        } else {
-            return false;
-        }
+    public boolean create() {
+        wifi.turnOnHotspot();
+        return true;
     }
-    public boolean isDisabled() {
-        if(wifi.isWifiApEnabled()) {
-            wifi.setWifiApEnabled(null, false);
-            return true;
-        } else {
-            return false;
-        }
-    }
-    public boolean isCreated(ReadableMap info) {
-        if(wifi.isWifiApEnabled()) {
-            WifiConfiguration config = new WifiConfiguration();
-            if( info.hasKey("SSID") && info.hasKey("password")) {
-                config.SSID = info.getString("SSID");
-                config.preSharedKey = info.getString("password");
-                config.allowedProtocols.set(WifiConfiguration.Protocol.WPA);
-                config.allowedProtocols.set(WifiConfiguration.Protocol.RSN);
-                config.allowedKeyManagement.set(4);
-                config.allowedAuthAlgorithms.set(WifiConfiguration.AuthAlgorithm.OPEN);
-                if(info.hasKey("protocols")) {
-                    switch(info.getInt("protocols")) {
-                        case HotspotModule.protocols.WPA:
-                            config.allowedProtocols.set(WifiConfiguration.Protocol.WPA);
-                            break;
-                        case HotspotModule.protocols.RSN:
-                            config.allowedProtocols.set(WifiConfiguration.Protocol.RSN);
-                            break;
-                        default:
-                        {
-                            config.allowedProtocols.set(WifiConfiguration.Protocol.WPA);
-                            config.allowedProtocols.set(WifiConfiguration.Protocol.RSN);
-                        }
-                        break;
-                    }
-                } if(info.hasKey("securityType")) {
-                    switch(info.getInt("securityType")) {
-                        case HotspotModule.security.IEEE8021X:
-                            config.allowedKeyManagement.set(WifiConfiguration.KeyMgmt.IEEE8021X);
-                            break;
-                        case HotspotModule.security.WPA_EAP:
-                            config.allowedKeyManagement.set(WifiConfiguration.KeyMgmt.WPA_EAP);
-                            break;
-                        case HotspotModule.security.WPA_PSK:
-                            config.allowedKeyManagement.set(WifiConfiguration.KeyMgmt.WPA_PSK);
-                            break;
-                        default:
-                            config.allowedKeyManagement.set(4);
-                            break;
-                    }
-                } if(info.hasKey("authAlgorithm")) {
-                    switch(info.getInt("authAlgorithm")) {
-                        case HotspotModule.authAlgorithm.LEAP:
-                            config.allowedAuthAlgorithms.set(WifiConfiguration.AuthAlgorithm.LEAP);
-                            break;
-                        case HotspotModule.authAlgorithm.OPEN:
-                            config.allowedAuthAlgorithms.set(WifiConfiguration.AuthAlgorithm.OPEN);
-                            break;
-                        default:
-                            config.allowedAuthAlgorithms.set(WifiConfiguration.AuthAlgorithm.SHARED);
-                            break;
-                    }
-                }
-                if(wifi.setWifiApConfiguration(config))
-                    return true;
-                else
-                    return false;
-            } else {
-                return false;
-            }
 
-        } else {
-            return false;
-        }
+    public boolean destroy() {
+        wifi.turnOffHotspot();
+        return true;
     }
+
     public WifiConfiguration getConfig() {
-        if(wifi.isWifiApEnabled()) {
-            return wifi.getWifiApConfiguration();
+        if (wifi.isHotspotStarted()) {
+            return wifi.getConfiguration();
         } else {
             return null;
         }
     }
+
     private void peersList() {
-        if(wifi.isWifiApEnabled()) {
+        if (wifi.isHotspotStarted()) {
             wifi.getClientList(true, new FinishScanListener() {
                 @Override
                 public void onFinishScan(ArrayList<ClientScanResult> clients) {
@@ -125,6 +55,7 @@ public class HotspotManager {
             });
         }
     }
+
     public void setPeersCallback(peersList callback) {
         this.callback = callback;
         peersList();
