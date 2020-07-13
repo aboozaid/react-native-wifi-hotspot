@@ -1,7 +1,7 @@
 {
   "name": "react-native-wifi-hotspot",
-  "version": "1.0.0",
-  "description": "A react-native implementation for handling hotspot requests and make it easier to communicate with peers!",
+  "version": "2.0.0",
+  "description": "A React Native implementation for handling local only hotspot requests",
   "main": "src/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -11,15 +11,19 @@
     "react-component",
     "react-native",
     "android",
-    "wifi",
     "connection",
-    "hotspot",
-    "wifi-direct"
+    "hotspot"
   ],
   "author": {
     "name": "Assem Abozaid",
     "email": "assemabozaidfcih@gmail.com"
   },
+  "contributors": [
+    {
+      "name": "Patrick Erichsen",
+      "email": "patrick.a.erichsen@gmail.com"
+    }
+  ],
   "license": "ISC",
   "repository": "https://github.com/assemmohamedali/react-native-hotspot",
   "bugs": "https://github.com/assemmohamedali/react-native-hotspot/issues",
