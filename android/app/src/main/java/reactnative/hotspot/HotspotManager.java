@@ -27,26 +27,26 @@ public class HotspotManager {
         wifi.showWritePermissionSettings(false);
     }
 
-    public boolean create() {
-        wifi.turnOnHotspot();
+    public boolean start() {
+        wifi.start();
         return true;
     }
 
-    public boolean destroy() {
-        wifi.turnOffHotspot();
+    public boolean close() {
+        wifi.close();
         return true;
     }
 
     public WifiConfiguration getConfig() {
-        if (wifi.isHotspotStarted()) {
+        if (wifi.isStarted()) {
             return wifi.getConfiguration();
         } else {
             return null;
         }
     }
 
-    private void peersList() {
-        if (wifi.isHotspotStarted()) {
+    private void getPeers() {
+        if (wifi.isStarted()) {
             wifi.getClientList(true, new FinishScanListener() {
                 @Override
                 public void onFinishScan(ArrayList<ClientScanResult> clients) {
@@ -58,6 +58,6 @@ public class HotspotManager {
 
     public void setPeersCallback(peersList callback) {
         this.callback = callback;
-        peersList();
+        getPeers();
     }
 }

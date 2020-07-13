@@ -60,7 +60,7 @@ public class WifiApManager {
         }
     }
 
-    public void turnOnHotspot() {
+    public void start() {
         if (hotspotReservation == null) {
             mWifiManager.startLocalOnlyHotspot(new WifiManager.LocalOnlyHotspotCallback() {
 
@@ -84,14 +84,14 @@ public class WifiApManager {
         }
     }
 
-    public void turnOffHotspot() {
+    public void close() {
         if (hotspotReservation != null) {
             hotspotReservation.close();
             hotspotReservation = null;
         }
     }
 
-    public boolean isHotspotStarted() {
+    public boolean isStarted() {
         return hotspotReservation != null;
     }
 

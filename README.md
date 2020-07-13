@@ -7,116 +7,118 @@
 [![NPM Version](https://img.shields.io/badge/yarn-1.0.0-red.svg)](https://yarnpkg.com/en/package/react-native-wifi-hotspot)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](#)
 
-# Introduce
-Since there's not a strict API from React Native to allow us to handle operations on `Hotspot`. So, today I would like to share my small kit with you guys to help most of rn developers to be able to use wifi-hotspot and enjoy its powerful.
+# Introduction
 
-The kit is designed to be helpful and to provide an easy API that can suit your needs so let me tell you how this kit can help you a long away with:
-  * Talk to your ROBOT!
-  * Communicating without an Internet
-  * Build yourown SHAREit (Share any types of files locally)
-  * Build a tiny network with your friends
+React Native (RN) does not provide an APIs to interact with the underlying Android APIs that control the Hotspot on a device.
+
+This library enables RN developers to programatically enable and disable Hotspot mode on an Android device using [`startLocalOnlyHotspot`](<https://developer.android.com/reference/android/net/wifi/WifiManager#startLocalOnlyHotspot(android.net.wifi.WifiManager.LocalOnlyHotspotCallback,%20android.os.Handler)>).
+
+Full documentation on hotpost startup, lifecycle, etc. is [available on the Android docs site](<https://developer.android.com/reference/android/net/wifi/WifiManager#startLocalOnlyHotspot(android.net.wifi.WifiManager.LocalOnlyHotspotCallback,%20android.os.Handler)>).
+
+## Local Only
+
+Note that as of Android APK 28+, it is not possible to programatically create a hotspot that has internet connectivity. The only available option is to create a "local only" hotspot that is not connected to the internet.
 
 ## Setup
-Fetch it using npm or yarn
+
+First, include the dependency:
+
 ```
+## npm
 npm i --save react-native-wifi-hotspot
-OR
+
+## yarn
 yarn add react-native-wifi-hotspot
 ```
-Then run this command to link it
-```
-react-native link react-native-wifi-hotspot
-```
-Almost done just put this lines into `Settings.gradle`
+
+Then, in the `Settings.gradle` of your RN project, add the `hotspotmanager` dependency:
+
 ```
 include ':hotspotmanager'
 project(':hotspotmanager').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-wifi-hotspot/android/hotspotmanager')
 ```
-💥 Just run it!
+
+Add the required app permisisons to the `AndroidManifest.xml` of your RN project:
+
+```xml
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+```
+
+Lastly, link the dependency:
+
+```
+react-native link react-native-wifi-hotspot
+```
 
 ## Example
-🔥 [Full Example](https://github.com/assemmohamedali/react-native-wifi-hotspot/tree/master/Example)
+
+🔥 [Full Example](https://github.com/assemmohamedali/react-native-wifi-hotspot/tree/master/TestApp)
 
 ## Features
-  * Enable Hotspot
-  * Disable Hotspot
-  * Create Hotspot's Settings (SSID, Password, ..)
-  * Fetch Hotspot's Settings
-  * Get List of Connected Peers
+
+- Create a connection to a local only hotspot
+- Close a connection to a local only hotspot
+- Fetch hotspot settings
+- Get a list of connected peers
 
 ## Demo
-![example app](/docs/image.gif)
 
-## Get Started
+![Test App](/docs/image.gif)
 
-* Check WIFI is on/off then turn hotspot on and automatically check if hotspot already opened
-~~~
-Hotspot.enable(() => {
-      ToastAndroid.show("Hotspot Enabled",ToastAndroid.SHORT);
-    }, (err) => {
-      ToastAndroid.show(err.toString(),ToastAndroid.SHORT);
-    })
-~~~
+## Usage
 
-* Check hotspot is on then turn it off and automatically check if hotspot already closed
-~~~
-Hotspot.disable(() => {
-      ToastAndroid.show("Hotspot Disabled",ToastAndroid.SHORT);
-    }, (err) => {
-      ToastAndroid.show(err.toString(),ToastAndroid.SHORT);
-    })
-~~~
+- Request a local only hotspot that an application can use to communicate between co-located devices connected to the created WiFi hotspot.
 
-* You can set your own configuration to your hotspot using this function. supported configuration:
-  * SSID
-  * Password
-  * Protocols
-  * authAlgorithms
-  * Security type
-  
+```js
+Hotspot.start(
+  () => {
+    ToastAndroid.show("Hotspot connection started", ToastAndroid.SHORT);
+  },
+  (err) => {
+    ToastAndroid.show(err.toString(), ToastAndroid.SHORT);
+  }
+);
+```
 
-| Parameters | Required | Types | Default
-| --- | --- | --- | --- |
-| `SSID` | * | none | none
-| `password` | * | none | password should be provided if you will use our settings |
-| `protocols` | - | `Hotspot.protocols.RSN` <br> `Hotspot.protocols.WPA` <br>`Hotspot.protocols.BOTH`| `Hotspot.protocols.BOTH` |
-| `securityType` | - | `Hotspot.security.WPA_PSK` <br> `Hotspot.security.WPA_EAP` <br> `Hotspot.security.IEEE8021X` <br> `Hotspot.security.WPA2_PSK` | `Hotspot.security.WPA2_PSK` |
-| `authAlgorithms` | - | `Hotspot.auth.OPEN` <br> `Hotspot.auth.SHARED` <br> `Hotspot.auth.LEAP` | `Hotspot.auth.SHARED` |
+- Close a hotspot connection. Note that since the hotspot may be shared among multiple applications, closing a connection does not necessarily teardown the hotspot.
 
-~~~
-const hotspot = {SSID: 'ASSEM', password: 'helloworld', authAlgorithms: Hotspot.auth.OPEN, protocols: Hotspot.protocols.WPA }
-    Hotspot.create(hotspot, () => {
-      ToastAndroid.show("Hotspot enstablished", ToastAndroid.SHORT);
-    }, (err) => {
-      ToastAndroid.show(err.toString(), ToastAndroid.SHORT);
-    })
-~~~
-> You can also use your own old settings without the need of creating new one
+```js
+Hotspot.close(
+  () => {
+    ToastAndroid.show("Hotspot connection closed", ToastAndroid.SHORT);
+  },
+  (err) => {
+    ToastAndroid.show(err.toString(), ToastAndroid.SHORT);
+  }
+);
+```
 
-* You can fetch your hotsot's configuration. Supported returning config:
-  * ssid
-  * password
-  * status ( network is enabled or disabled )
-  * networkId
-~~~
-config: {
-  ssid: string,
-  password: string,
-  status: boolean ( true means enable, false means disable )
-  networkId: Int
-}
-Hotspot.getConfig((config) => {
-      ToastAndroid.show("Hotspot SSID: " + config.ssid, ToastAndroid.SHORT);
-    }, (err) => {
-      ToastAndroid.show(err.toString(), ToastAndroid.SHORT);
-    })
-~~~
+- Fetch the configuration for the hotspot. Contains the following fields:
 
-* Fethcing connected devices to your wifi network. Returned an object for every device contains:
-  * ip
-  * mac
-  * device number
-~~~
+  - `networkId`
+  - `status`
+  - `password`
+  - `ssid`
+
+```js
+Hotspot.getConfig(
+  (hotspotConfig) => {
+    console.log(hotspotConfig);
+  },
+  (err) => {
+    ToastAndroid.show(err.toString(), ToastAndroid.SHORT);
+  }
+);
+```
+
+- Fetch list of connected devices to your hotspot. Contains the following fields:
+
+  - `IP`
+  - `MAC address`
+  - `Device number`
+
+```js
 data: [
   results: {
     ip: 192.168.x.x,
@@ -124,9 +126,9 @@ data: [
     device: number
   }
 ]
-Hotspot.peersList((data) => {
+Hotspot.getPeers((data) => {
       const peers = JSON.parse(data);
     }, (err) => {
       ToastAndroid.show(err.toString(), ToastAndroid.SHORT);
     })
-~~~
+```

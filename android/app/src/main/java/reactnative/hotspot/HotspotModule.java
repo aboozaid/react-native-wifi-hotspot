@@ -57,19 +57,19 @@ public class HotspotModule extends ReactContextBaseJavaModule implements Lifecyc
     }
 
     @ReactMethod
-    public void create(Callback success, Callback error) {
-        if (hotspot.create()) {
+    public void start(Callback success, Callback error) {
+        if (hotspot.start()) {
             success.invoke();
         } else
             error.invoke("Hotspot already running");
     }
 
     @ReactMethod
-    public void destroy(Callback success, Callback error) {
-        if (hotspot.destroy())
+    public void close(Callback success, Callback error) {
+        if (hotspot.close())
             success.invoke();
         else
-            error.invoke("Hotspot already closed");
+            error.invoke("Hotspot connection already closed");
     }
 
     @ReactMethod
@@ -89,7 +89,7 @@ public class HotspotModule extends ReactContextBaseJavaModule implements Lifecyc
     }
 
     @ReactMethod
-    public void peersList(final Callback success, final Callback error) {
+    public void getPeers(final Callback success, final Callback error) {
         hotspot.setPeersCallback(new HotspotManager.peersList() {
             @Override
             public void onPeersScanned(ArrayList<ClientScanResult> peers) {

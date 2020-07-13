@@ -12,11 +12,12 @@ import Hotspot from 'react-native-wifi-hotspot';
 
 const App = () => {
   const [peersList, setPeersList] = useState([]);
+  const [config, setConfig] = useState({});
 
-  const enable = () => {
-    Hotspot.enable(
+  const start = () => {
+    Hotspot.start(
       () => {
-        ToastAndroid.show('Hotspot Enabled', ToastAndroid.SHORT);
+        ToastAndroid.show('Hotspot connection started', ToastAndroid.SHORT);
       },
       (err) => {
         ToastAndroid.show(err.toString(), ToastAndroid.SHORT);
@@ -24,10 +25,12 @@ const App = () => {
     );
   };
 
-  const disable = () => {
-    Hotspot.disable(
+  const close = () => {
+    Hotspot.close(
       () => {
-        ToastAndroid.show('Hotspot Disabled', ToastAndroid.SHORT);
+        ToastAndroid.show('Hotspot connection closed', ToastAndroid.SHORT);
+        setPeersList([]);
+        setConfig({});
       },
       (err) => {
         ToastAndroid.show(err.toString(), ToastAndroid.SHORT);
@@ -35,24 +38,10 @@ const App = () => {
     );
   };
 
-  const create = () => {
-    const hotspot = {SSID: 'ASSEM', password: 'helloworld'};
-
-    Hotspot.create(
-      hotspot,
-      () => {
-        ToastAndroid.show('Hotspot enstablished', ToastAndroid.SHORT);
-      },
-      (err) => {
-        ToastAndroid.show(err.toString(), ToastAndroid.SHORT);
-      },
-    );
-  };
-
-  const fetch = () => {
+  const getConfig = () => {
     Hotspot.getConfig(
-      (config) => {
-        ToastAndroid.show(config.ssid, ToastAndroid.SHORT);
+      (hotspotConfig) => {
+        setConfig(hotspotConfig);
       },
       (err) => {
         ToastAndroid.show(err.toString(), ToastAndroid.SHORT);
@@ -60,8 +49,8 @@ const App = () => {
     );
   };
 
-  const peers = () => {
-    Hotspot.peersList(
+  const getPeers = () => {
+    Hotspot.getPeers(
       (data) => {
         setPeersList(JSON.parse(data));
       },
@@ -74,44 +63,35 @@ const App = () => {
   return (
     <View style={styles.container}>
       <Text style={styles.welcome}>React native Hotspot library</Text>
+      <Text style={styles.welcome}>Creates a local only hotspot</Text>
       <View style={{marginBottom: 10}}>
-        <Text style={styles.subtitle}>Enable & Check if it already opened</Text>
-        <Button title="enable" onPress={enable} />
+        <Button title="start" onPress={start} />
       </View>
       <View style={{marginBottom: 10}}>
-        <Text style={styles.subtitle}>
-          Disable & Check if it already disabled
-        </Text>
-        <Button title="disable" onPress={disable} />
+        <Button title="close" onPress={close} />
       </View>
       <View style={{marginBottom: 10}}>
-        <Text style={styles.subtitle}>
-          Set your hotspot seetings (SSID, PASSWORD, ...)
-        </Text>
-        <Button title="create" onPress={create} />
+        <Button title="show peers" onPress={getPeers} />
       </View>
       <View style={{marginBottom: 10}}>
-        <Text style={styles.subtitle}>Fetch hotspot settings</Text>
-        <Button title="fetch" onPress={fetch} />
+        <Button title="show config" onPress={getConfig} />
       </View>
       <View>
-        <Text style={styles.subtitle}>Show all peers</Text>
-        <Button title="peers" onPress={peersList} />
+        <Text style={styles.welcome}>Peers List</Text>
+        {peersList.map((peer, i) => (
+          <View style={styles.viewList} key={i}>
+            <Text style={styles.viewText}>{peer.device}</Text>
+            <Text style={styles.viewText}>{peer.ip}</Text>
+            <Text style={styles.viewText}>{peer.mac}</Text>
+          </View>
+        ))}
       </View>
-      {/* <ListView
-          dataSource={this.state.dataSource}
-          style={{marginTop: 15}}
-          renderRow={(peer, index) => {
-            return (
-              <View style={styles.viewList} key={index}>
-                <Text style={styles.viewText}>{peer.device}</Text>
-                <Text style={styles.viewText}>{peer.ip}</Text>
-                <Text style={styles.viewText}>{peer.mac}</Text>
-              </View>
-            );
-          }}
-          enableEmptySections
-        /> */}
+      <View>
+        <Text style={styles.welcome}>Config</Text>
+        {Object.entries(config).map(([key, val], i) => (
+          <Text key={i}>{`${key}: ${val}`}</Text>
+        ))}
+      </View>
     </View>
   );
 };
