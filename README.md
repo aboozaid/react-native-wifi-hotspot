@@ -13,15 +13,15 @@ React Native (RN) does not provide an APIs to interact with the underlying Andro
 
 This library enables RN developers to programatically enable and disable Hotspot mode on an Android device using [`startLocalOnlyHotspot`](<https://developer.android.com/reference/android/net/wifi/WifiManager#startLocalOnlyHotspot(android.net.wifi.WifiManager.LocalOnlyHotspotCallback,%20android.os.Handler)>).
 
-Full documentation on hotpost startup, lifecycle, etc. is [available on the Android docs site](<https://developer.android.com/reference/android/net/wifi/WifiManager#startLocalOnlyHotspot(android.net.wifi.WifiManager.LocalOnlyHotspotCallback,%20android.os.Handler)>).
+**Full documentation on hotpost startup, lifecycle, etc. is [available on the Android docs site](<https://developer.android.com/reference/android/net/wifi/WifiManager#startLocalOnlyHotspot(android.net.wifi.WifiManager.LocalOnlyHotspotCallback,%20android.os.Handler)>).**
 
 ## Local Only
 
-Note that as of Android APK 28+, it is not possible to programatically create a hotspot that has internet connectivity. The only available option is to create a "local only" hotspot that is not connected to the internet.
+As of Android APK 28+, it is not possible to programatically create a hotspot that has internet connectivity. The only available option is to create a "local only" hotspot that is not connected to the internet.
 
 ## Setup
 
-First, include the dependency:
+1. Include the dependency:
 
 ```
 ## npm
@@ -31,29 +31,38 @@ npm i --save react-native-wifi-hotspot
 yarn add react-native-wifi-hotspot
 ```
 
-Then, in the `Settings.gradle` of your RN project, add the `hotspotmanager` dependency:
+2. Link the dependency:
+
+```
+react-native link react-native-wifi-hotspot
+```
+
+3. In the `Settings.gradle` of your RN project, there are two updates that need to be made after linking:
+
+- Update the path of `react-native-wifi-hotspot`
+
+```diff
+-project(':react-native-wifi-hotspot').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-wifi-hotspot/android')
++project(':react-native-wifi-hotspot').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-wifi-hotspot/android/app')
+```
+
+- Add the `hotspotmanager` dependency:
 
 ```
 include ':hotspotmanager'
 project(':hotspotmanager').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-wifi-hotspot/android/hotspotmanager')
 ```
 
-Add the required app permisisons to the `AndroidManifest.xml` of your RN project:
+4. Add the required app permisisons to the `AndroidManifest.xml` of your RN project:
 
 ```xml
     <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 ```
 
-Lastly, link the dependency:
-
-```
-react-native link react-native-wifi-hotspot
-```
-
 ## Example
 
-🔥 [Full Example](https://github.com/assemmohamedali/react-native-wifi-hotspot/tree/master/TestApp)
+🔥 [Sample React Native application](https://github.com/assemmohamedali/react-native-wifi-hotspot/tree/master/TestApp)
 
 ## Features
 
@@ -73,11 +82,11 @@ react-native link react-native-wifi-hotspot
 ```js
 Hotspot.start(
   () => {
-    ToastAndroid.show("Hotspot connection started", ToastAndroid.SHORT);
+    ToastAndroid.show('Hotspot connection started', ToastAndroid.SHORT);
   },
   (err) => {
     ToastAndroid.show(err.toString(), ToastAndroid.SHORT);
-  }
+  },
 );
 ```
 
@@ -86,11 +95,11 @@ Hotspot.start(
 ```js
 Hotspot.close(
   () => {
-    ToastAndroid.show("Hotspot connection closed", ToastAndroid.SHORT);
+    ToastAndroid.show('Hotspot connection closed', ToastAndroid.SHORT);
   },
   (err) => {
     ToastAndroid.show(err.toString(), ToastAndroid.SHORT);
-  }
+  },
 );
 ```
 
@@ -108,7 +117,7 @@ Hotspot.getConfig(
   },
   (err) => {
     ToastAndroid.show(err.toString(), ToastAndroid.SHORT);
-  }
+  },
 );
 ```
 
