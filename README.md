@@ -7,6 +7,8 @@
 [![NPM Version](https://img.shields.io/badge/yarn-1.0.0-red.svg)](https://yarnpkg.com/en/package/react-native-wifi-hotspot)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](#)
 
+# DEPRECATED
+Please use [react-native-tethering](https://github.com/aboozaid/react-native-tethering) instead which compatible with latest react-native versions and Android APIs
 # Introduce
 Since there's not a strict API from React Native to allow us to handle operations on `Hotspot`. So, today I would like to share my small kit with you guys to help most of rn developers to be able to use wifi-hotspot and enjoy its powerful.
 
